@@ -1,0 +1,17 @@
+--- Makefile.orig	2016-12-14 03:23:30 UTC
++++ Makefile
+@@ -1,11 +1,10 @@
+-PREFIX=/usr/local
+-INSTALL_DIR=$(PREFIX)/include/xbyak
++INSTALL_DIR=../stage/usr/local/include/xbyak
+ 
+ all:
+-	make -C sample
++	gmake -C sample
+ 
+ clean:
+-	make -C sample clean
++	gmake -C sample clean
+ 
+ install:
+ 	mkdir -p $(INSTALL_DIR)
