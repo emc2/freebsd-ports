@@ -1,0 +1,11 @@
+--- Makefile.orig	2014-12-15 05:33:17 UTC
++++ Makefile
+@@ -6,3 +6,8 @@ clean:
+ 	$(MAKE) -C src clean
+ 	$(MAKE) -C test clean
+ 
++install:
++	mkdir ../stage/usr/local/include/ate-pairing
++	cp -pR include/* ../stage/usr/local/include/ate-pairing/
++	cp -pR lib/* ../stage/usr/local/lib/
++
