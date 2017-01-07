@@ -1,0 +1,58 @@
+--- Makefile.orig	2016-10-16 17:24:21 UTC
++++ Makefile
+@@ -6,8 +6,13 @@
+ #* @copyright  MIT license (see LICENSE file)
+ #*******************************************************************************/
+ 
++NO_PROCPS=1
++NO_GTEST=1
++NO_SUPERCOP=1
++INSTALLDIR=../stage/usr/local/
++
+ # To override these, use "make OPTFLAGS=..." etc.
+-CURVE = BN128
++CURVE = ALT_BN128
+ OPTFLAGS = -O2 -march=native -mtune=native
+ FEATUREFLAGS = -DUSE_ASM -DMONTGOMERY_OUTPUT
+ 
+@@ -19,9 +24,9 @@ DEPINST = depinst
+ 
+ CXXFLAGS += -I$(DEPINST)/include -Isrc
+ LDFLAGS += -L$(DEPINST)/lib -Wl,-rpath,$(DEPINST)/lib
+-LDLIBS += -lgmpxx -lgmp -lboost_program_options
++LDLIBS += -lgmpxx -lgmp -lboost_program_options -lsodium
+ # OpenSSL and its dependencies (needed explicitly for static builds):
+-LDLIBS += -lcrypto -ldl -lz
++LDLIBS += -lcrypto -lz
+ # List of .a files to include within libsnark.a and libsnark.so:
+ AR_LIBS =
+ # List of library files to install:
+@@ -239,21 +244,21 @@ $(DOCS): %.html: %.md
+ #	TODO: Would be nice to enable "-x smartypants" but Ubuntu 12.04 doesn't support that.
+ #	TODO: switch to redcarpet, to produce same output as GitHub's processing of README.md. But what about TOC?
+ 
+-ifeq ($(PREFIX),)
++ifeq ($(INSTALLDIR),)
+ install:
+-	$(error Please provide PREFIX. E.g. make install PREFIX=/usr)
++	$(error Please provide INSTALLDIR. E.g. make install INSTALLDIR=/usr)
+ else
+ HEADERS_SRC=$(shell find src -name '*.hpp' -o -name '*.tcc')
+-HEADERS_DEST=$(patsubst src/%,$(PREFIX)/include/libsnark/%,$(HEADERS_SRC))
++HEADERS_DEST=$(patsubst src/%,$(INSTALLDIR)/include/libsnark/%,$(HEADERS_SRC))
+ 
+-$(HEADERS_DEST): $(PREFIX)/include/libsnark/%: src/%
++$(HEADERS_DEST): $(INSTALLDIR)/include/libsnark/%: src/%
+ 	mkdir -p $(shell dirname $@)
+ 	cp $< $@
+ 
+ install: $(INSTALL_LIBS) $(HEADERS_DEST) $(DEPINST_EXISTS)
+-	mkdir -p $(PREFIX)/lib
+-	cp -v $(INSTALL_LIBS) $(PREFIX)/lib/
+-	cp -rv $(DEPINST)/include $(PREFIX)
++	mkdir -p $(INSTALLDIR)/lib
++	cp -v $(INSTALL_LIBS) $(INSTALLDIR)/lib/
++	cp -rv $(DEPINST)/include $(INSTALLDIR)
+ endif
+ 
+ doxy:
