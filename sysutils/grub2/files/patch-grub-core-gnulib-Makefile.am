@@ -1,0 +1,11 @@
+--- grub-core/gnulib/Makefile.am.orig	2019-05-27 11:52:29.110850000 -0400
++++ grub-core/gnulib/Makefile.am	2019-05-27 11:52:58.816985000 -0400
+@@ -394,7 +394,7 @@
+ 	  case '$(host_os)' in \
+ 	    darwin[56]*) \
+ 	      need_charset_alias=true ;; \
+-	    darwin* | cygwin* | mingw* | pw32* | cegcc*) \
++	    darwin* | cygwin* | mingw* | pw32* | cegcc* | freebsd*) \
+ 	      need_charset_alias=false ;; \
+ 	    *) \
+ 	      need_charset_alias=true ;; \

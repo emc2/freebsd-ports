@@ -1,0 +1,51 @@
+--- configure.ac.orig	2017-04-24 07:30:15.000000000 -0400
++++ configure.ac	2019-06-02 07:04:52.548463000 -0400
+@@ -1644,7 +1644,7 @@
+ FONT_SOURCE=
+ 
+ for ext in pcf pcf.gz bdf bdf.gz ttf ttf.gz; do
+-  for dir in . /usr/src /usr/share/fonts/X11/misc /usr/share/fonts/unifont /usr/share/fonts/uni /usr/share/fonts/truetype/unifont /usr/share/fonts/misc; do
++  for dir in . /usr/local/share/fonts/gnu-unifont /usr/local/share/fonts/gnu-unifont-ttf; do
+     if test -f "$dir/unifont.$ext"; then
+       md5="$(md5sum "$dir/unifont.$ext"|awk '{ print $1; }')"
+       # PCF and BDF from version 6.3 isn't hanled properly by libfreetype.
+@@ -1787,19 +1787,26 @@
+ 
+ if test x"$libzfs_excuse" = x ; then
+   # Only check for system headers if libzfs support has not been disabled.
+-  AC_CHECK_HEADERS(libzfs.h libnvpair.h)
++  AC_CHECK_HEADERS(libzfs.h libnvpair.h, [], [], [
++#include <stdint.h>
++
++typedef unsigned int uint_t;
++typedef uint64_t hrtime_t;
++typedef unsigned char uchar_t;
++typedef int boolean_t;
++])
+ fi
+ 
+ if test x"$libzfs_excuse" = x ; then
+   AC_CHECK_LIB([zfs], [libzfs_init],
+                [],
+-               [libzfs_excuse="need zfs library"])
++               [libzfs_excuse="need zfs library"], [-lavl -lnvpair -luutil -lm])
+ fi
+ 
+ if test x"$libzfs_excuse" = x ; then
+   AC_CHECK_LIB([nvpair], [nvlist_lookup_string],
+                [],
+-               [libzfs_excuse="need nvpair library"])
++               [libzfs_excuse="need nvpair library"], [-lavl -lnvpair -luutil -lm])
+ fi
+ 
+ if test x"$enable_libzfs" = xyes && test x"$libzfs_excuse" != x ; then
+@@ -1812,6 +1819,9 @@
+   AC_DEFINE([HAVE_LIBZFS], [1],
+             [Define to 1 if you have the ZFS library.])
+   LIBNVPAIR="-lnvpair"
++  if test x$host_kernel = xkfreebsd; then
++    LIBNVPAIR="$LIBNVPAIR -lavl -luutil -lm"
++  fi
+   AC_DEFINE([HAVE_LIBNVPAIR], [1],
+             [Define to 1 if you have the NVPAIR library.])
+ fi
