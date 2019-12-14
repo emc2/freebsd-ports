@@ -1,0 +1,11 @@
+--- Makefile.orig	2019-11-26 11:32:10.000000000 -0500
++++ Makefile	2019-12-14 12:23:25.005924000 -0500
+@@ -27,7 +27,7 @@
+ build-scala: $(scala_jar)
+ 
+ $(scala_jar): $(scala_src)
+-	$(SBT) "assembly"
++	$(SBT) $(SBT_FLAGS) "assembly"
+ 
+ test-scala:
+ 	$(SBT) test

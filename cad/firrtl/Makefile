@@ -21,5 +21,10 @@ NO_ARCH=        yes
 USE_JAVA=       yes
 ALL_TARGET=	build
 
+do-install:
+	mkdir ${STAGEDIR}/usr/local/share/firrtl/
+	install -C -m 755 ${WRKSRC}/utils/bin/firrtl ${STAGEDIR}/usr/local/bin
+	install -C -m 755 ${WRKSRC}/utils/bin/firrtl.jar ${STAGEDIR}/usr/local/share/firrtl/
+
 .include <bsd.port.mk>
 
