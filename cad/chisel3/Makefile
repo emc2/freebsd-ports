@@ -19,6 +19,8 @@ BUILD_DEPENDS=  ${LOCALBASE}/bin/scalac:lang/scala \
 USES=           tar:tgz gmake
 NO_ARCH=        yes
 USE_JAVA=       yes
+ALL_TARGET=	compile
+INSTALL_TARGET=	publish-local
 
 .include <bsd.port.mk>
 
