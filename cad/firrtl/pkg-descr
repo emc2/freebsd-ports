@@ -1,0 +1,7 @@
+Firrtl is an intermediate representation (IR) for digital circuits designed as
+a platform for writing circuit-level transformations. This repository consists
+of a collection of transformations (written in Scala) which simplify, verify,
+transform, or emit their input circuit.
+
+A Firrtl compiler is constructed by chaining together these transformations,
+then writing the final circuit to a file.
