@@ -1,0 +1,2 @@
+share/chisel3/chisel3.jar
+share/chisel3/scala-%%SCALA_VERSION%%/chisel3_%%SCALA_VERSION%%-%%PORTVERSION%%.jar
