@@ -1,2 +1,3 @@
 bin/firrtl
 share/firrtl/firrtl.jar
+share/firrtl/scala-%%SCALA_VERSION%%/firrtl_%%SCALA_VERSION%%-%%PORTVERSION%%.jar
