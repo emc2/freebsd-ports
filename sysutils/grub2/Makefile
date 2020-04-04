@@ -3,7 +3,6 @@
 
 PORTNAME=	grub2
 PORTVERSION=	2.04
-PORTREVISION=	15
 CATEGORIES=	sysutils
 MASTER_SITES=	GNU/grub
 DISTNAME=	grub-${PORTVERSION}
@@ -14,8 +13,6 @@ COMMENT=	Multiboot boot loader
 LICENSE=	GPLv3
 
 BROKEN_i386=	uses amd64 assembly
-#DEPRECATED=	Unmaintained (more than five years), not updated (one-and-a-half years), does not build with modern compilers	# PR232961
-#EXPIRATION_DATE=2019-02-04
 
 ONLY_FOR_ARCHS=	amd64 i386
 
@@ -25,7 +22,7 @@ BUILD_DEPENDS=	${LOCALBASE}/bin/flex:textproc/flex \
 RUN_DEPENDS=	gsed:textproc/gsed
 
 USES=		autoreconf bison cpe gettext gmake tar:xz
-USE_GCC=	7	# Fails to build with GCC 8, cf. PR 232961, or clang
+USE_GCC=	9	# Fails to build with GCC 8, cf. PR 232961, or clang
 
 GNU_CONFIGURE=	yes
 INFO=		grub grub-dev
