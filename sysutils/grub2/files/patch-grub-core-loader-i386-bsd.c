@@ -1,5 +1,5 @@
 --- grub-core/loader/i386/bsd.c.orig	2019-04-23 04:54:47.000000000 -0400
-+++ grub-core/loader/i386/bsd.c	2020-04-04 21:47:56.073361000 -0400
++++ grub-core/loader/i386/bsd.c	2020-04-05 15:41:15.190725000 -0400
 @@ -76,6 +76,29 @@
  static struct grub_relocator *relocator = NULL;
  static struct grub_openbsd_ramdisk_descriptor openbsd_ramdisk;
@@ -30,58 +30,94 @@
  struct bsd_tag
  {
    struct bsd_tag *next;
-@@ -1567,7 +1590,56 @@
+@@ -592,6 +615,71 @@
+ }
+ 
+ static grub_err_t
++grub_freebsd_setup_fw_handle (void)
++{
++  grub_err_t err = GRUB_ERR_NONE;
++#ifdef GRUB_MACHINE_EFI
++
++  /* Add EFI firmware handle */
++  err = grub_bsd_add_meta (FREEBSD_MODINFO_METADATA |
++                           FREEBSD_MODINFOMD_FW_HANDLE,
++                           &grub_efi_system_table,
++                           sizeof (grub_efi_system_table));
++#endif
++  return err;
++}
++
++static grub_err_t
++grub_freebsd_setup_video (void)
++{
++  grub_err_t err = GRUB_ERR_NONE;
++
++  /* TODO: add keys to keybuf */
++#ifdef GRUB_MACHINE_EFI
++
++  /* Add EFI frame buffer info */
++  struct freebsd_efi_fb efifb;
++  struct grub_video_mode_info mode_info;
++  void *framebuffer;
++
++  err = grub_video_get_info_and_fini (&mode_info, &framebuffer);
++
++  if (err)
++    return err;
++
++  efifb.fb_addr = (grub_addr_t) framebuffer;
++  efifb.fb_height = mode_info.height;
++  efifb.fb_width = mode_info.width;
++  efifb.fb_stride = mode_info.pitch / mode_info.bytes_per_pixel;
++  efifb.fb_size = mode_info.height * mode_info.pitch;
++  efifb.fb_mask_red =
++    ((1 << mode_info.red_mask_size) - 1) <<
++    mode_info.red_field_pos;
++  efifb.fb_mask_green =
++    ((1 << mode_info.green_mask_size) - 1) <<
++    mode_info.green_field_pos;
++  efifb.fb_mask_blue =
++    ((1 << mode_info.blue_mask_size) - 1) <<
++    mode_info.blue_field_pos;
++  efifb.fb_mask_reserved =
++    ((1 << mode_info.reserved_mask_size) - 1) <<
++    mode_info.reserved_field_pos;
++  err = grub_bsd_add_meta (FREEBSD_MODINFO_METADATA |
++                           FREEBSD_MODINFOMD_EFI_FB,
++                           &efifb, sizeof (efifb));
++
++  /* TODO: add EFI map */
++  /*
++  err = grub_bsd_add_meta (FREEBSD_MODINFO_METADATA |
++                           FREEBSD_MODINFOMD_EFI_MAP,
++                           &efifb, sizeof (efifb));
++  */
++#endif
++
++  return err;
++}
++
++static grub_err_t
+ grub_freebsd_boot (void)
+ {
+   struct grub_freebsd_bootinfo bi;
+@@ -1563,11 +1651,20 @@
+ 	  if (err)
+ 	    return err;
+ 
++          err = grub_freebsd_setup_fw_handle ();
++          if (err)
++            return err;
++
++          err = grub_freebsd_setup_video ();
++          if (err)
++            return err;
++
+ 	  err = grub_bsd_add_meta (FREEBSD_MODINFO_METADATA |
  				   FREEBSD_MODINFOMD_KERNEND, &data, len);
  	  if (err)
  	    return err;
-+
-+          /* TODO: add keys to keybuf */
-+#ifdef GRUB_MACHINE_EFI
-+          /* Add EFI firmware handle */
-+          err = grub_bsd_add_meta (FREEBSD_MODINFO_METADATA |
-+				   FREEBSD_MODINFOMD_FW_HANDLE,
-+                                   &grub_efi_system_table,
-+                                   sizeof (grub_efi_system_table));
-+
-+          if (err)
-+            return err;
-+
-+          /* Add EFI frame buffer info */
-+          struct freebsd_efi_fb efifb;
-+          struct grub_video_mode_info mode_info;
-+          void *framebuffer;
-+
-+          err = grub_video_get_info_and_fini (&mode_info, &framebuffer);
-+
-+          if (err)
-+            return err;
-+
-+          efifb.fb_addr = (grub_addr_t) framebuffer;
-+          efifb.fb_height = mode_info.height;
-+          efifb.fb_width = mode_info.width;
-+          efifb.fb_stride = mode_info.pitch / mode_info.bytes_per_pixel;
-+          efifb.fb_size = mode_info.height * mode_info.pitch;
-+          efifb.fb_mask_red =
-+            ((1 << mode_info.red_mask_size) - 1) <<
-+            mode_info.red_field_pos;
-+          efifb.fb_mask_green =
-+            ((1 << mode_info.green_mask_size) - 1) <<
-+            mode_info.green_field_pos;
-+          efifb.fb_mask_blue =
-+            ((1 << mode_info.blue_mask_size) - 1) <<
-+            mode_info.blue_field_pos;
-+          efifb.fb_mask_reserved =
-+            ((1 << mode_info.reserved_mask_size) - 1) <<
-+            mode_info.reserved_field_pos;
-+          err = grub_bsd_add_meta (FREEBSD_MODINFO_METADATA |
-+				   FREEBSD_MODINFOMD_EFI_FB,
-+                                   &efifb, sizeof (efifb));
-+
-+          if (err)
-+            return err;
-+
-+          /* TODO: add EFI map */
-+#endif
  	}
 +
        grub_bsd_get_device (&freebsd_biosdev, &unit, &slice, &part);
