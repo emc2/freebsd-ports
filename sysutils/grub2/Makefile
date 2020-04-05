@@ -22,7 +22,7 @@ BUILD_DEPENDS=	${LOCALBASE}/bin/flex:textproc/flex \
 RUN_DEPENDS=	gsed:textproc/gsed
 
 USES=		autoreconf bison cpe gettext gmake tar:xz
-USE_GCC=	9	# Fails to build with GCC 8, cf. PR 232961, or clang
+LDFLAGS+=	-L/usr/local/lib
 
 GNU_CONFIGURE=	yes
 INFO=		grub grub-dev
