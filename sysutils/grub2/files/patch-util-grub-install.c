@@ -72,15 +72,6 @@
    {"disk-module", OPTION_DISK_MODULE, N_("MODULE"), 0,
     N_("disk module to use (biosdisk or native). "
        "This option is only available on BIOS target."), 2},
-@@ -362,7 +371,7 @@
-   N_("Install GRUB on your drive.")"\v"
-   N_("INSTALL_DEVICE must be system device filename.\n"
-      "%s copies GRUB images into %s.  On some platforms, it"
--     " may also install GRUB into the boot sector."), 
-+     " may also install GRUB into the boot sector."),
-   NULL, help_filter, NULL
- };
- 
 @@ -389,13 +398,20 @@
  push_partmap_module (const char *map, void *data __attribute__ ((unused)))
  {
