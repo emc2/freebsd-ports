@@ -101,6 +101,7 @@ _linux_${linux_ARGS}_libv4l=		linux-${linux_ARGS}-libv4l>0:multimedia/linux-${li
 _linux_${linux_ARGS}_libvorbis=		linux-${linux_ARGS}-libvorbis>0:audio/linux-${linux_ARGS}-libvorbis
 _linux_c7_libxkbcommon=			linux-c7-libxkbcommon>0:x11/linux-c7-libxkbcommon
 _linux_${linux_ARGS}_libxml2=		linux-${linux_ARGS}-libxml2>0:textproc/linux-${linux_ARGS}-libxml2
+_linux_${linux_ARGS}_libxslt=		linux-${linux_ARGS}-libxslt>0:textproc/linux-${linux_ARGS}-libxslt
 _linux_${linux_ARGS}_lttng-ust=		linux-${linux_ARGS}-lttng-ust>0:sysutils/linux-${linux_ARGS}-lttng-ust
 _linux_c7_lz4=				linux-c7-lz4>0:archivers/linux-c7-lz4
 _linux_c7_make=				linux-c7-make>0:devel/linux-c7-make
@@ -134,6 +135,9 @@ _linux_c7_trousers=			linux-c7-trousers>0:security/linux-c7-trousers
 _linux_${linux_ARGS}_userspace-rcu=	linux-${linux_ARGS}-userspace-rcu>0:sysutils/linux-${linux_ARGS}-userspace-rcu
 _linux_c7_wayland=			linux-c7-wayland>0:graphics/linux-c7-wayland
 _linux_c7_xorglibs=			linux-c7-xorg-libs>=7.7_7:x11/linux-c7-xorg-libs
+_linux_c7_xcb-util=			linux-c7-xcb-util>0:x11/linux-c7-xcb-util
+_linux_c7_xcb-util-image=		linux-c7-xcb-util-image>0:x11/linux-c7-xcb-util-image
+_linux_c7_xcb-util-keysyms=		linux-c7-xcb-util-keysyms>0:x11/linux-c7-xcb-util-keysyms
 
 USE_LINUX?=		base
 .for i in ${USE_LINUX}
