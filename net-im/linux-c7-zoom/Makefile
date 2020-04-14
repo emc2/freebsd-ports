@@ -1,9 +1,9 @@
 # $FreeBSD$
 
 PORTNAME=	zoom
-PORTVERSION=	3.5
+PORTVERSION=	3.5.385850.0413
 CATEGORIES=	net-im linux
-MASTER_SITES=	https://zoom.us/client/latest/
+MASTER_SITES=	https://zoom.us/client/${PORTVERSION}/
 PKGNAMEPREFIX=	linux-c7-
 DISTFILES=	${PORTNAME}_x86_64.rpm
 SRC_DISTFILES=
